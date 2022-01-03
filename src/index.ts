@@ -1,5 +1,5 @@
 import { txnToRow } from "./transformer";
-import { addRow } from "./spreadsheet";
+import { addRow, addRows } from "./spreadsheet";
 import {
   getAllTransactions,
   getTransactions,
@@ -10,11 +10,14 @@ const goFn = async () => {
   const txns = await getAllTransactions(forAddress, 13911289);
 
   console.log("got", txns.length, "transactions");
+  const rows: (string | number)[][] = [];
   for (const t of txns) {
     const row = await txnToRow(forAddress, t);
-    await addRow(row);
-    console.log("Added row", JSON.stringify(row));
+    rows.push(row);
+    console.log("Created row", JSON.stringify(row));
   }
+  await addRows(rows);
+  console.log("Added ", rows.length, "rows to spreadsheet");
 
   // console.log("row");
   // await addRow(["hello", "world", 3]);

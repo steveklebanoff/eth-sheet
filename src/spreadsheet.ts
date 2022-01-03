@@ -17,8 +17,11 @@ export const getSheet = async () => {
 };
 
 export const addRow = async (values: (string | number)[]) => {
-  console.log("adding row...");
   const sheet = await getSheet();
   await sheet.addRow(values);
-  console.log("added!");
+};
+
+export const addRows = async (values: (string | number)[][]) => {
+  const sheet = await getSheet();
+  await sheet.addRows(values);
 };
