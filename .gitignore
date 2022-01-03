@@ -1,2 +1,5 @@
 src/demo.ts
 node_modules
+.env
+.env.local
+keys
