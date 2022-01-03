@@ -1,3 +1,4 @@
+import { txnToRow } from "./transformer";
 import { addRow } from "./spreadsheet";
 import {
   getAllTransactions,
@@ -5,9 +6,18 @@ import {
 } from "./covalent/covalent_fetchers";
 
 const goFn = async () => {
-  console.log("row");
-  await addRow(["hello", "world", 3]);
+  const forAddress = "0x8a333a18b924554d6e83ef9e9944de6260f61d3b";
+  const txns = await getAllTransactions(forAddress, 13911289);
 
+  console.log("got", txns.length, "transactions");
+  for (const t of txns) {
+    const row = await txnToRow(forAddress, t);
+    await addRow(row);
+    console.log("Added row", JSON.stringify(row));
+  }
+
+  // console.log("row");
+  // await addRow(["hello", "world", 3]);
   // console.log("fetching txns");
   // const txns = await getAllTransactions(
   //   "0x8a333a18b924554d6e83ef9e9944de6260f61d3b",

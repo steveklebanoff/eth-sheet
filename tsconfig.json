@@ -7,6 +7,9 @@
         "target": "es5",
         "baseUrl": "./src/",
         "typeRoots": ["node_modules/@types"],
+        "paths": {
+            "*": ["node_modules/*"],
+        },
         "resolveJsonModule": true
     },
     "include": ["./src/**/*", "./src/contracts/**/*"]
