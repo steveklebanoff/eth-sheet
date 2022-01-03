@@ -6,7 +6,7 @@ import {
 
 const goFn = async () => {
   console.log("row");
-  await addRow();
+  await addRow(["hello", "world", 3]);
 
   // console.log("fetching txns");
   // const txns = await getAllTransactions(

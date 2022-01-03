@@ -16,9 +16,9 @@ export const getSheet = async () => {
   return sheet;
 };
 
-export const addRow = async () => {
+export const addRow = async (values: (string | number)[]) => {
   console.log("adding row...");
   const sheet = await getSheet();
-  await sheet.addRow(["this", "is", "from", "api"]);
+  await sheet.addRow(values);
   console.log("added!");
 };
