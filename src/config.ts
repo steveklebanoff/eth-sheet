@@ -15,6 +15,10 @@ export const config = {
     "COVALENT_API_KEY"
   ),
   rpcUrl: envStringOrThrow(process.env.RPC_URL, "RPC_URL"),
+  googleSheetsApikey: envStringOrThrow(
+    process.env.GOOGLE_SHEETS_API_KEY,
+    "GOOGLE_SHEETS_API_KEY"
+  ),
 };
 
 export const ethersProvider = new ethers.providers.JsonRpcProvider(
