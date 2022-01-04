@@ -9,14 +9,25 @@ const envStringOrThrow = (val: string | undefined, name: string) => {
   }
 };
 
-const ethereumAddresssesRaw = envStringOrThrow(
+const ethereumAddresses = envStringOrThrow(
   process.env.ETHEREUM_ADDRESSES,
   "ETHEREUM_ADDRESSES"
-);
-const ethereumAddresses = ethereumAddresssesRaw.split(",");
+).split(",");
+const arbitrumAddresses = process.env.ARBITRUM_ADDRESSES
+  ? process.env.ARBITRUM_ADDRESSES.split(",")
+  : [];
+const avalancheAddresses = process.env.AVALANCHE_ADDRESSES
+  ? process.env.AVALANCHE_ADDRESSES.split(",")
+  : [];
+const polygonAddresses = process.env.polygon_ADDRESSES
+  ? process.env.polygon_ADDRESSES.split(",")
+  : [];
 
 export const config = {
   ethereumAddresses,
+  arbitrumAddresses,
+  avalancheAddresses,
+  polygonAddresses,
   covalentApi: envStringOrThrow(
     process.env.COVALENT_API_KEY,
     "COVALENT_API_KEY"

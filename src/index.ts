@@ -1,3 +1,4 @@
+import { EvmNetwork } from "./constants";
 import {
   getHaveSeenTransaction,
   getIsRunning,
@@ -16,8 +17,43 @@ import {
   getTransactions,
 } from "./covalent/covalent_fetchers";
 
+const fetchTransactions = async (
+  addresses: string[],
+  lastKnownBlockFetched: number,
+  curBlock: number,
+  network: EvmNetwork
+) => {
+  let count = 0;
+  for (const forAddress of addresses) {
+    count += 1;
+    console.log(
+      `====== Fetching for ${forAddress} ${count}/${config.ethereumAddresses.length} from block ${lastKnownBlockFetched} to block ${curBlock}. network: ${network} =====`
+    );
+    const txns = await getAllTransactions(
+      forAddress,
+      lastKnownBlockFetched,
+      network
+    );
+    console.log("Got", txns.length, `transactions for ${forAddress}`);
+    const rows: (string | number)[][] = [];
+    for (const t of txns) {
+      const haveSeen = await getHaveSeenTransaction(t.tx_hash);
+      if (haveSeen) {
+        console.warn(`already seen`, t.tx_hash, "skipping...");
+      } else {
+        const row = await txnToRow(forAddress, network, t);
+        rows.push(row);
+        console.log("Created row:", JSON.stringify(row));
+      }
+      await setHaveSeenTransaction(t.tx_hash);
+    }
+    await addRows(rows);
+    console.log("Added", rows.length, "rows to spreadsheet");
+  }
+};
+
 const goFn = async () => {
-  const lastKnownBlockFetched = await getLastBlockFetched();
+  const lastKnownBlockFetched = (await getLastBlockFetched()) - 50;
   const curLastBlockHeight = await getLastBlockHeight();
 
   const isRunning = await getIsRunning();
@@ -28,29 +64,23 @@ const goFn = async () => {
 
   await setIsRunning();
   try {
-    let count = 0;
-    for (const forAddress of config.ethereumAddresses) {
-      count += 1;
+    const networConfigs: [string, EvmNetwork, string[]][] = [
+      ["ethereum", EvmNetwork.Ethereum, config.ethereumAddresses],
+      ["arbitrum", EvmNetwork.Arbitrum, config.arbitrumAddresses],
+      ["avalanche", EvmNetwork.Avalanche, config.avalancheAddresses],
+      ["polygon", EvmNetwork.Polygon, config.polygonAddresses],
+    ];
+    for (const networkConfig of networConfigs) {
+      const [networkName, networkId, addresses] = networkConfig;
       console.log(
-        `====== Fetching for ${forAddress} ${count}/${config.ethereumAddresses.length} from block ${lastKnownBlockFetched} to block ${curLastBlockHeight} =====`
+        `Fetching ${networkName} (${networkId}) for addresses ${addresses}`
       );
-
-      const txns = await getAllTransactions(forAddress, lastKnownBlockFetched);
-      console.log("Got", txns.length, `transactions for ${forAddress}`);
-      const rows: (string | number)[][] = [];
-      for (const t of txns) {
-        const haveSeen = await getHaveSeenTransaction(t.tx_hash);
-        if (haveSeen) {
-          console.warn(`already seen`, t.tx_hash, "skipping...");
-        } else {
-          const row = await txnToRow(forAddress, t);
-          rows.push(row);
-          console.log("Created row:", JSON.stringify(row));
-        }
-        await setHaveSeenTransaction(t.tx_hash);
-      }
-      await addRows(rows);
-      console.log("Added", rows.length, "rows to spreadsheet");
+      await fetchTransactions(
+        addresses,
+        lastKnownBlockFetched,
+        curLastBlockHeight,
+        networkId
+      );
     }
   } catch (e) {
     throw e;

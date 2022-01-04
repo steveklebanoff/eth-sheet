@@ -1,3 +1,4 @@
+import { EvmNetwork } from "./../constants";
 import { config } from "../config";
 import axios from "axios";
 import {
@@ -26,17 +27,21 @@ export const getCovalent = async (
 
 export const getTransactions = async (
   address: string,
+  network: EvmNetwork,
   paginationOptions: { pageNumber: number; pageSize: number }
 ) => {
+  const urlSearch = `address/${address}/transactions_v2/?page-number=${paginationOptions.pageNumber}&page-size=${paginationOptions.pageSize}&block-signed-at-asc=false`;
   const resp = getCovalent(
-    `address/${address}/transactions_v2/?page-number=${paginationOptions.pageNumber}&page-size=${paginationOptions.pageSize}&block-signed-at-asc=false`
+    urlSearch,
+    `https://api.covalenthq.com/v1/${network}/`
   );
   return resp as any as TransactionsResponse;
 };
 
 export const getAllTransactions = async (
   address: string,
-  upToBlockHeight: number
+  upToBlockHeight: number,
+  network: EvmNetwork
 ) => {
   console.log(`Fetching all transactions ${address}, ${upToBlockHeight}`);
 
@@ -46,7 +51,7 @@ export const getAllTransactions = async (
   let keepGoing = true;
   while (keepGoing) {
     console.info("Fetching page", curPage);
-    const curTxns = await getTransactions(address, {
+    const curTxns = await getTransactions(address, network, {
       pageNumber: curPage,
       pageSize: pageSize,
     });
