@@ -12,7 +12,9 @@ export const txnToRow = async (
     forAddress,
     item.block_signed_at.toString(),
     url,
+    item.to_address,
     "TODO",
+    item.value_quote == 0 ? " " : `$${item.value_quote}`,
     // tokenInfo[0],
     // tokenInfo[1],
   ];

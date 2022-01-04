@@ -1,6 +1,7 @@
 import { config } from "../config";
 import axios from "axios";
 import {
+  CovalentBlockResponse,
   PricesResponse,
   TransactionResponseItem,
   TransactionsResponse,
@@ -81,4 +82,17 @@ export const getHistoricalPrices = async (
   );
 
   return resp as PricesResponse;
+};
+
+export const getLastBlockResponse = async () => {
+  const resp = await getCovalent(
+    `1/block_v2/latest/`,
+    "https://api.covalenthq.com/v1/"
+  );
+  return resp as any as CovalentBlockResponse;
+};
+
+export const getLastBlockHeight = async () => {
+  const resp = await getLastBlockResponse();
+  return resp.data.items[0].height;
 };

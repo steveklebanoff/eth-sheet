@@ -10,9 +10,7 @@ export const getSheet = async () => {
   });
 
   await doc.loadInfo();
-  console.log(doc.title);
-
-  const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
+  const sheet = doc.sheetsByIndex[0];
   return sheet;
 };
 

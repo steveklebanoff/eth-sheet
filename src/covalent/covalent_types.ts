@@ -117,3 +117,21 @@ export interface ContractMetadata {
   supports_erc: string[];
   logo_url: string;
 }
+
+export interface CovalentBlockResponse {
+  data: CovalentBlockData;
+  error: boolean;
+  error_message: null;
+  error_code: null;
+}
+
+export interface CovalentBlockData {
+  updated_at: Date;
+  items: CovalentBlockItem[];
+  pagination: null;
+}
+
+export interface CovalentBlockItem {
+  signed_at: Date;
+  height: number;
+}

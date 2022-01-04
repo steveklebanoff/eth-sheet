@@ -9,7 +9,14 @@ const envStringOrThrow = (val: string | undefined, name: string) => {
   }
 };
 
+const ethereumAddresssesRaw = envStringOrThrow(
+  process.env.ETHEREUM_ADDRESSES,
+  "ETHEREUM_ADDRESSES"
+);
+const ethereumAddresses = ethereumAddresssesRaw.split(",");
+
 export const config = {
+  ethereumAddresses,
   covalentApi: envStringOrThrow(
     process.env.COVALENT_API_KEY,
     "COVALENT_API_KEY"
