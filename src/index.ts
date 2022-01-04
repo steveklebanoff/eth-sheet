@@ -53,9 +53,7 @@ const fetchTransactions = async (
 };
 
 const goFn = async () => {
-  const lastKnownBlockFetched = (await getLastBlockFetched()) - 50;
-  const curLastBlockHeight = await getLastBlockHeight();
-
+  // TODO: diff last block per network
   const isRunning = await getIsRunning();
   if (isRunning) {
     console.log("Skipping because already running");
@@ -72,20 +70,28 @@ const goFn = async () => {
     ];
     for (const networkConfig of networConfigs) {
       const [networkName, networkId, addresses] = networkConfig;
+      const lastKnownBlockFetched = (await getLastBlockFetched(networkId)) - 50;
+      const curLastBlockHeight = await getLastBlockHeight(networkId);
+
       console.log(
         `Fetching ${networkName} (${networkId}) for addresses ${addresses}`
       );
-      await fetchTransactions(
-        addresses,
-        lastKnownBlockFetched,
-        curLastBlockHeight,
-        networkId
-      );
+      try {
+        await fetchTransactions(
+          addresses,
+          lastKnownBlockFetched,
+          curLastBlockHeight,
+          networkId
+        );
+      } catch (e) {
+        throw e;
+      } finally {
+        await setLastBlockFetched(networkId, curLastBlockHeight);
+      }
     }
   } catch (e) {
     throw e;
   } finally {
-    await setLastBlockFetched(curLastBlockHeight);
     await setIsNotRunning();
   }
 };

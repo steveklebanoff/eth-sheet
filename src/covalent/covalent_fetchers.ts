@@ -89,15 +89,15 @@ export const getHistoricalPrices = async (
   return resp as PricesResponse;
 };
 
-export const getLastBlockResponse = async () => {
+export const getLastBlockResponse = async (network: EvmNetwork) => {
   const resp = await getCovalent(
-    `1/block_v2/latest/`,
+    `${network}/block_v2/latest/`,
     "https://api.covalenthq.com/v1/"
   );
   return resp as any as CovalentBlockResponse;
 };
 
-export const getLastBlockHeight = async () => {
-  const resp = await getLastBlockResponse();
+export const getLastBlockHeight = async (network: EvmNetwork) => {
+  const resp = await getLastBlockResponse(network);
   return resp.data.items[0].height;
 };

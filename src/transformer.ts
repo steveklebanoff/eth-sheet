@@ -21,7 +21,7 @@ const bestNetworkName = (network: EvmNetwork) => {
     case EvmNetwork.Ethereum:
       return "Ethereum";
     case EvmNetwork.Arbitrum:
-      return "Avalanche";
+      return "Arbitrum";
     case EvmNetwork.Polygon:
       return "Polygon";
     case EvmNetwork.Avalanche:
@@ -40,12 +40,12 @@ export const txnToRow = async (
   const url = `https://${bestEtherscan(network)}/tx/${item.tx_hash}`;
   return [
     bestNetworkName(network),
-    forAddress,
     item.block_signed_at.toString(),
-    url,
+    forAddress,
     item.to_address,
+    url,
     "TODO",
-    item.value_quote == 0 ? " " : `$${item.value_quote}`,
+    // item.value_quote == 0 ? " " : `$${item.value_quote}`,
     // tokenInfo[0],
     // tokenInfo[1],
   ];
