@@ -50,7 +50,7 @@ const goFn = async () => {
         await setHaveSeenTransaction(t.tx_hash);
       }
       await addRows(rows);
-      console.log("Added ", rows.length, "rows to spreadsheet");
+      console.log("Added", rows.length, "rows to spreadsheet");
     }
   } catch (e) {
     throw e;
