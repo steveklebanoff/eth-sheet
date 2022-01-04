@@ -20,7 +20,7 @@ const avalancheAddresses = process.env.AVALANCHE_ADDRESSES
   ? process.env.AVALANCHE_ADDRESSES.split(",")
   : [];
 const polygonAddresses = process.env.polygon_ADDRESSES
-  ? process.env.polygon_ADDRESSES.split(",")
+  ? process.env.POLYGON_ADDRESSES.split(",")
   : [];
 
 export const config = {
