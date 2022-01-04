@@ -3,6 +3,7 @@ import * as Redis from "ioredis";
 const redisClient = process.env.REDIS_URI
   ? new Redis(process.env.REDIS_URI)
   : new Redis(6379, "localhost");
+console.log("REDIS_URI", process.env.REDIS_URI);
 
 const KEY_PREFIX = "eth_sheet";
 const IS_RUNNING_REDIS_KEY = `${KEY_PREFIX}:is_running`;
