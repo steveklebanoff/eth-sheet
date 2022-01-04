@@ -9,4 +9,9 @@ RPC_URL=
 GOOGLE_SHEETS_API_KEY=
 GOOGLE_API_EMAIL=
 GOOGLE_API_PK=
+REDIS_URI=
 ```
+
+Defaults to fetching transactions from block 13907728 to current.
+
+Expected to run via cron job.
